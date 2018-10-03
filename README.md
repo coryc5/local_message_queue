@@ -15,6 +15,11 @@ def deps do
 end
 ```
 
+## Development Mix Tasks
+
+* mix coveralls - generate coverage
+* mix dialyzer - run static analysis
+
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/local_message_queue](https://hexdocs.pm/local_message_queue).
