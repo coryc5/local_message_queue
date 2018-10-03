@@ -3,17 +3,19 @@ defmodule LocalMessageQueue.QueueTest do
 
   alias LocalMessageQueue.{TestHelpers, Queue}
 
-  setup context do
-    registry = __MODULE__.Registry
-    start_supervised!({Registry, keys: :unique, name: registry})
+  @registry __MODULE__.Registry
+  @id __MODULE__
 
-    name = {:via, Registry, {registry, System.unique_integer([:monotonic])}}
+  setup context do
+    start_supervised!({Registry, keys: :unique, name: @registry})
+
+    name = {:via, Registry, {@registry, System.unique_integer([:monotonic])}}
 
     config = %{
-      id: __MODULE__,
+      id: @id,
       name: name,
       filter: context[:filter],
-      registry: registry
+      registry: @registry
     }
 
     start_supervised!({Queue, config})
@@ -74,6 +76,25 @@ defmodule LocalMessageQueue.QueueTest do
       end)
 
       assert Queue.len(name) == 0
+    end
+
+    test "concat dispatches message to registered listeners", %{name: name} do
+      LocalMessageQueue.listen_to_queue(@registry, @id)
+
+      input = [1, 2, 3]
+      _result = Queue.concat(name, input)
+
+      assert_receive({:queue_add, ^name})
+    end
+
+    test "pop dispatches message to registered listeners", %{name: name} do
+      LocalMessageQueue.listen_to_queue(@registry, @id)
+
+      input = [1, 2, 3]
+      _result = Queue.concat(name, input)
+      _value = Queue.pop(name)
+
+      assert_receive({:queue_remove, ^name})
     end
   end
 end

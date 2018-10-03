@@ -38,6 +38,8 @@ defmodule LocalMessageQueue.Queue do
 
   @doc """
   Adds `list` to the end of `queue`.
+
+  Also dispatches a `{:queue_add, queue_name}` message for any registered listeners.
   """
   @spec concat(queue_name, [any]) :: [any]
   def concat(queue, list) do
@@ -46,6 +48,8 @@ defmodule LocalMessageQueue.Queue do
 
   @doc """
   Returns the first item in `queue` and removes it from the internal queue.
+
+  Also dispatches a `{:queue_remove, queue_name}` message for any registered listeners.
   """
   @spec pop(queue_name) :: any
   def pop(queue) do
@@ -66,12 +70,20 @@ defmodule LocalMessageQueue.Queue do
 
     new_state = %{state | pre_queue_stack: Enum.reverse(filtered_list) ++ state.pre_queue_stack}
 
+    LocalMessageQueue.dispatch(state.registry, {:queue_add, state.id}, {:queue_add, state.name})
+
     {:reply, new_state.pre_queue_stack, new_state}
   end
 
   def handle_call(:pop, _from, state) do
     {item, remaining_queue, pre_queue_stack} = handle_pop(state)
     new_state = %{state | queue: remaining_queue, pre_queue_stack: pre_queue_stack}
+
+    LocalMessageQueue.dispatch(
+      state.registry,
+      {:queue_remove, state.id},
+      {:queue_remove, state.name}
+    )
 
     {:reply, item, new_state}
   end
