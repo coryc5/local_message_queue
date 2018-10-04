@@ -12,8 +12,8 @@ defmodule LocalMessageQueue.Preloader do
           subscription_key: atom,
           publisher_key: atom,
           registry: Registry.registry(),
-          cache: atom | nil,
-          queue: atom
+          cache: LocalMessageQueue.Cache.cache_name() | nil,
+          queue: LocalMessageQueue.Queue.queue_name()
         }
 
   @doc false

@@ -8,7 +8,7 @@ defmodule LocalMessageQueue.Consumer do
           callback: {module, fun},
           publisher_key: atom,
           delay: pos_integer | nil,
-          cache: atom | nil
+          cache: LocalMessageQueue.Cache.cache_name() | nil
         }
 
   @spec start_link(config) :: GenServer.on_start()
