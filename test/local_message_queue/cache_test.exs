@@ -22,7 +22,7 @@ defmodule LocalMessageQueue.CacheTest do
 
   test "returns value if key exists", %{name: name} do
     key = :some_key
-    value = :some_value
+    value = [:some_value]
 
     :ok = Cache.put(name, key, value)
 
@@ -31,7 +31,7 @@ defmodule LocalMessageQueue.CacheTest do
 
   test "returns nil if item has expired", %{name: name} do
     key = :some_key
-    value = :some_value
+    value = [:some_value]
 
     :ok = Cache.put(name, key, value)
 
