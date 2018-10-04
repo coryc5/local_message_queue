@@ -14,22 +14,22 @@ defmodule LocalMessageQueue.Cache do
   end
 
   @doc """
-  Adds `value` to the cache under `key`.
+  Adds `values` to the cache under `key`.
   """
-  @spec put(cache_name, any, any) :: :ok
-  def put(cache_name, key, value) do
+  @spec put(cache_name, any, list) :: :ok
+  def put(cache_name, key, values) when is_list(values) do
     Agent.update(cache_name, fn %{cache: cache, expiration_ms: expiration_ms} ->
       now = get_now()
-      new_cache = Map.put(cache, key, {value, now + expiration_ms})
+      new_cache = Map.put(cache, key, {values, now + expiration_ms})
 
       %{cache: new_cache, expiration_ms: expiration_ms}
     end)
   end
 
   @doc """
-  Returns the cache's value under `key` if it exists and has not expired.
+  Returns the cache's values under `key` if it exists and has not expired.
   """
-  @spec get(cache_name, any) :: any
+  @spec get(cache_name, any) :: list
   def get(cache_name, key) do
     now = get_now()
 
