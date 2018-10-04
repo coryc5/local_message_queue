@@ -10,6 +10,18 @@ defmodule LocalMessageQueue do
   end
 
   @doc """
+  Dispatch a message containing data to all registered listeners.
+  """
+  @spec dispatch_new_msgs(Registry.registry(), Registry.key(), list) :: :ok
+  def dispatch_new_msgs(_, _, []), do: :ok
+
+  def dispatch_new_msgs(registry, key, new_msgs) do
+    msg = {:new_msgs, key, new_msgs}
+
+    dispatch(registry, key, msg)
+  end
+
+  @doc """
   Registers the calling process as a listener of `registry`'s `key`.
   """
   @spec listen(Registry.registry(), any) :: :ok
