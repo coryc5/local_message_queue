@@ -38,7 +38,8 @@ defmodule LocalMessageQueue.Supervisor do
   def child_spec(config) do
     %{
       id: config.id,
-      start: {__MODULE__, :start_link, [config]}
+      start: {__MODULE__, :start_link, [config]},
+      type: :supervisor
     }
   end
 
