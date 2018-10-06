@@ -1,8 +1,6 @@
 defmodule LocalMessageQueue.SupervisorTest do
   use ExUnit.Case, async: true
 
-  alias LocalMessageQueue.TestHelpers
-
   @name_registry __MODULE__.NameRegistry
   @msg_registry __MODULE__.MsgRegistry
   @id __MODULE__
@@ -19,10 +17,8 @@ defmodule LocalMessageQueue.SupervisorTest do
       id: @id,
       cache_ttl: nil,
       queue: %{},
-      consumer: %{
-        delay: nil,
-        callback: {TestHelpers, :double}
-      },
+      consumer: %{delay: nil},
+      producer: LocalMessageQueue.Producers.Double,
       subscription_key: @subscription_key,
       publisher_key: @publisher_key
     }
@@ -41,9 +37,9 @@ defmodule LocalMessageQueue.SupervisorTest do
     # dispatch a msg
     LocalMessageQueue.dispatch_new_msgs(@msg_registry, @subscription_key, input)
 
-    # consumer should dispatch input doubled per the callback
+    # consumer should dispatch input doubled per the producer
     Enum.each(input, fn msg ->
-      result = TestHelpers.double(msg)
+      result = msg * 2
 
       assert_receive({:new_msgs, @publisher_key, [^result]})
     end)

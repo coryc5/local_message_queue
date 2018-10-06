@@ -25,7 +25,7 @@ defmodule LocalMessageQueue.ConsumerTest do
       id: @id,
       name: name,
       registry: @registry,
-      callback: {LocalMessageQueue.TestHelpers, :double},
+      producer: LocalMessageQueue.Producers.Double,
       publisher_key: @publisher_key,
       delay: nil,
       cache: nil
@@ -40,7 +40,7 @@ defmodule LocalMessageQueue.ConsumerTest do
     # register as a listener
     :ok = LocalMessageQueue.listen(@registry, @publisher_key)
 
-    # the consumer should double this value per the callback configuration
+    # the consumer should double this value per the producer configuration
     input = 4
 
     LocalMessageQueue.Queue.concat(queue_name, [input])

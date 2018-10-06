@@ -1,7 +1,7 @@
 defmodule LocalMessageQueue.PreloaderTest do
   use ExUnit.Case, async: true
 
-  alias LocalMessageQueue.{Cache, TestHelpers}
+  alias LocalMessageQueue.Cache
 
   @registry __MODULE__.Registry
   @id __MODULE__
@@ -75,7 +75,7 @@ defmodule LocalMessageQueue.PreloaderTest do
   test "dispatches results of messages that have been cached and does not add them to the queue",
        %{queue_name: queue_name, cache_name: cache_name} do
     first_msg = 1
-    cached_result = [TestHelpers.double(first_msg)]
+    cached_result = [first_msg * 2]
     Cache.put(cache_name, first_msg, cached_result)
 
     # register as a listener to queue

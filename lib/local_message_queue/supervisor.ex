@@ -3,7 +3,7 @@ defmodule LocalMessageQueue.Supervisor do
 
   use Supervisor
 
-  alias LocalMessageQueue.{Cache, Consumer, Preloader, Queue}
+  alias LocalMessageQueue.{Cache, Consumer, Preloader, Producer, Queue}
 
   @type config :: %{
           name_registry: Registry.registry(),
@@ -12,6 +12,7 @@ defmodule LocalMessageQueue.Supervisor do
           cache_ttl: pos_integer | nil,
           queue: map,
           consumer: map,
+          producer: Producer.t(),
           subscription_key: atom,
           publisher_key: atom
         }
@@ -64,7 +65,7 @@ defmodule LocalMessageQueue.Supervisor do
       id: config.id,
       name: name(config, Consumer),
       registry: config.message_registry,
-      callback: consumer.callback,
+      producer: config.producer,
       publisher_key: config.publisher_key,
       delay: Map.get(consumer, :delay),
       cache: config.cache_ttl && name(config, Cache)
