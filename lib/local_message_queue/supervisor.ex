@@ -47,7 +47,7 @@ defmodule LocalMessageQueue.Supervisor do
   defp cache_children(other_children, %{cache_ttl: nil}), do: other_children
 
   defp cache_children(other_children, %{cache_ttl: ttl} = config) do
-    [{Cache, {name(config, Cache), ttl * 1000}} | other_children]
+    [{Cache, {name(config, Cache), ttl}} | other_children]
   end
 
   @spec queue_config(config) :: Queue.config()
