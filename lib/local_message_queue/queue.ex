@@ -6,7 +6,7 @@ defmodule LocalMessageQueue.Queue do
   use GenServer
 
   @type queue_name :: GenServer.name()
-  @type filter_fun :: (any -> boolean)
+  @type filter_fun :: {module, fun}
   @type config :: %{
           id: atom,
           name: queue_name,
@@ -110,7 +110,7 @@ defmodule LocalMessageQueue.Queue do
   defp maybe_filter_list(list, filter) do
     case filter do
       nil -> list
-      filter when is_function(filter, 1) -> Enum.filter(list, filter)
+      {module, fun} -> Enum.filter(list, fn val -> apply(module, fun, [val]) end)
     end
   end
 end

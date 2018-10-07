@@ -63,7 +63,7 @@ defmodule LocalMessageQueue.QueueTest do
       assert Queue.pop(name) == :empty
     end
 
-    @tag filter: &TestHelpers.greater_than_one?/1
+    @tag filter: {TestHelpers, :greater_than_one?}
     test "concat filters out items via a filter fun", %{name: name} do
       input = [1, 2, 3]
 
