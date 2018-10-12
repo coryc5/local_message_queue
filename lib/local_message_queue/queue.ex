@@ -79,11 +79,13 @@ defmodule LocalMessageQueue.Queue do
     {item, remaining_queue, pre_queue_stack} = handle_pop(state)
     new_state = %{state | queue: remaining_queue, pre_queue_stack: pre_queue_stack}
 
-    LocalMessageQueue.dispatch(
-      state.registry,
-      {:queue_remove, state.id},
-      {:queue_remove, state.name}
-    )
+    unless item == :empty do
+      LocalMessageQueue.dispatch(
+        state.registry,
+        {:queue_remove, state.id},
+        {:queue_remove, state.name}
+      )
+    end
 
     {:reply, item, new_state}
   end
