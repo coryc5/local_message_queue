@@ -24,7 +24,7 @@ defmodule LocalMessageQueue.Consumer do
   end
 
   @impl true
-  def handle_continue({:queue_add, queue_name}, config) do
+  def handle_continue({:read_queue, queue_name}, config) do
     handle_data(queue_name, config)
   end
 
@@ -61,7 +61,7 @@ defmodule LocalMessageQueue.Consumer do
             LocalMessageQueue.dispatch(config.registry, config.publisher_key, e)
         end
 
-        {:noreply, config, {:continue, {:queue_add, queue_name}}}
+        {:noreply, config, {:continue, {:read_queue, queue_name}}}
     end
   end
 end
