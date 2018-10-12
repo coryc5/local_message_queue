@@ -14,7 +14,8 @@ defmodule LocalMessageQueue.Supervisor do
           consumer: map,
           producer: Producer.t(),
           subscription_key: atom,
-          publisher_key: atom
+          publisher_key: atom,
+          strategy: Supervisor.strategy()
         }
 
   @spec start_link(config) :: Supervisor.on_start()
@@ -31,7 +32,7 @@ defmodule LocalMessageQueue.Supervisor do
     ]
 
     children_with_cache = cache_children(children, config)
-    Supervisor.init(children_with_cache, strategy: :one_for_all)
+    Supervisor.init(children_with_cache, strategy: Map.get(config, :strategy, :one_for_one))
   end
 
   @spec child_spec(config) :: Supervisor.child_spec()
