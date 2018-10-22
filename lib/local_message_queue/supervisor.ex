@@ -69,6 +69,7 @@ defmodule LocalMessageQueue.Supervisor do
       registry: config.message_registry,
       producer: config.producer,
       publisher_key: config.publisher_key,
+      queue_name: name(config, Queue),
       delay: Map.get(consumer, :delay),
       cache: config.cache_ttl && name(config, Cache)
     }

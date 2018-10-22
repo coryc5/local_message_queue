@@ -7,6 +7,7 @@ defmodule LocalMessageQueue.Consumer do
           registry: Registry.registry(),
           producer: LocalMessageQueue.Producer.t(),
           publisher_key: atom,
+          queue_name: LocalMessageQueue.Queue.queue_name(),
           delay: pos_integer | nil,
           cache: LocalMessageQueue.Cache.cache_name() | nil
         }
@@ -20,7 +21,7 @@ defmodule LocalMessageQueue.Consumer do
   def init(config) do
     LocalMessageQueue.listen_to_queue(config.registry, config.id)
 
-    {:ok, config}
+    {:ok, config, {:continue, {:read_queue, config.queue_name}}}
   end
 
   @impl true

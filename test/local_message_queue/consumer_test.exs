@@ -27,6 +27,7 @@ defmodule LocalMessageQueue.ConsumerTest do
       registry: @registry,
       producer: LocalMessageQueue.Producers.Double,
       publisher_key: @publisher_key,
+      queue_name: queue_name,
       delay: nil,
       cache: nil
     }
