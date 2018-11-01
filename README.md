@@ -1,4 +1,6 @@
 # LocalMessageQueue
+[![CircleCI](https://circleci.com/gh/coryc5/local_message_queue/tree/master.svg?style=svg)](https://circleci.com/gh/coryc5/local_message_queue/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/coryc5/local_message_queue/badge.svg?branch=master)](https://coveralls.io/github/coryc5/local_message_queue?branch=master)
 
 **TODO: Add description**
 
